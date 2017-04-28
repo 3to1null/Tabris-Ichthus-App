@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="nathan.fraignt.me" version="1.5.1">
+  <name>IC Veenendaal</name>
+  <description>
+    De niet-officiële app van het Ichthus College Veenendaal. Deze app is NIET gemaakt door het Ichthus College veenendaal, maar kan wel door die leerlingen worden gebruikt.
+  </description>
+  <author email="nathanklumpenaar10@outlook.com" href="https://api.fraignt.me">
+    Fraignt
+  </author>
+   <plugin name="cordova-plugin-dialogs" version="1.1.1" />
+	<plugin name="de.appplant.cordova.plugin.local-notification" spec="https://github.com/katzer/cordova-plugin-local-notifications" version="0.8.1" />
+	<plugin name="cordova-ourcodeworld-filebrowser" spec="https://github.com/ourcodeworld/cordova-ourcodeworld-filebrowser.git" />
+	<plugin name="cordova-plugin-file-transfer" />
+   <plugin name="cordova-plugin-file" />
+   <plugin name="cordova-plugin-fileopener" />
+   <plugin name="cordova-plugin-mediascanner" />
+    <platform name="android">
+        <icon src="drawable-mdpi/ic_launcher.png" density="mdpi" />
+        <icon src="drawable-hdpi/ic_launcher.png" density="hdpi" />
+        <icon src="drawable-xhdpi/ic_launcher.png" density="xhdpi" />
+        <icon src="drawable-xxhdpi/ic_launcher.png" density="xxhdpi" />
+        <icon src="drawable-xxxhdpi/ic_launcher.png" density="xxxhdpi" />
+    </platform>
+</widget>

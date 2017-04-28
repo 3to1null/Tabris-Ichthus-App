@@ -1,0 +1,211 @@
+[
+	{
+		"isHeader": true,
+		"header": "Algemeen",
+		"type": "header"
+	},
+	{
+		"storageKey": "-s-verlengSessie",
+		"name": "verlengSessie",
+		"default": true,
+		"desc": "Verleng sessie automatisch",
+		"toastOnChange": "Instelling aangepast.",
+		"isHeader": false,
+		"type": "bool"			
+	},
+	{
+		"storageKey": "-s-accentKleur",
+		"name": "accentKleurPicker",
+		"desc": "Accent kleur",
+		"isHeader": false,
+		"default": "1",
+		"type": "picker",
+		"picker": "color",
+		"toastOnChange": "Verandering is zichtbaar na het opnieuw opstarten van de app.",
+		"options": [
+			{
+				"id": "deepOrange",
+				"name": "Donkeroranje"
+			},
+			{
+				"id": "teal",
+				"name": "Groenblauw"
+			},
+			{
+				"id": "pink",
+				"name": "Roze"
+			},
+			{
+				"id": "purple",
+				"name": "Paars"
+			}
+		]
+	},
+	{
+		"isHeader": true,
+		"header": "Rooster",
+		"type": "header"
+	},
+	{
+		"storageKey": "-s-showLeraar",
+		"name": "showLeraar",
+		"desc": "Laat leraren zien",
+		"isHeader": false,
+		"default": true,
+		"type": "bool",
+		"toastOnChange": "Verandering is zichtbaar na het laden van een nieuw rooster."
+	},
+	{
+		"storageKey": "-s-showKlas",
+		"name": "showKlas",
+		"default": false,
+		"desc": "Laat klassen zien",
+		"isHeader": false,
+		"type": "bool",
+		"toastOnChange": "Verandering is zichtbaar na het laden van een nieuw rooster."
+	},
+	{
+		"isHeader": true,
+		"header": "Cijfers",
+		"type": "header"
+	},
+	{
+		"storageKey": "-s-onvoldoendeKleur",
+		"name": "onvoldoendeKleurPicker",
+		"desc": "Kleur van onvoldoendes",
+		"default": "1",
+		"isHeader": false,
+		"toastOnChange": "Verandering is pas volledig zichtbaar na het opnieuw opstarten van de app.",
+		"type": "picker",
+		"picker": "color",
+		"options": [
+			{
+				"id": "teal",
+				"name": "Groenblauw"
+			},
+			{
+				"id": "deepOrange",
+				"name": "Donkeroranje"
+			},
+			{
+				"id": "pink",
+				"name": "Roze"
+			},
+			{
+				"id": "purple",
+				"name": "Paars"
+			}
+		]
+	},
+	{
+		"storageKey": "-s-cijferThema",
+		"name": "cijferThemaPicker",
+		"desc": "Thema van cijferlijst",
+		"isHeader": false,
+		"default": "0",
+		"toastOnChange": "Verandering is pas volledig zichtbaar na het opnieuw opstarten van de app.",
+		"type": "picker",
+		"picker": "theme",
+		"options": [
+			{
+				"id": "Material",
+				"name": "Material"
+			},
+			{
+				"id": "Klassiek",
+				"name": "Klassiek"
+			}
+		]
+	},
+	{
+		"isHeader": true,
+		"header": "Bestanden",
+		"type": "header"
+	},
+	{
+		"storageKey": "-s-showImageInApp",
+		"name": "showImageInApp",
+		"desc": "Laat afbeeldingen in deze app zien",
+		"isHeader": false,
+		"default": true,
+		"type": "bool",
+		"toastOnChange": "Instelling aangepast."
+	},
+	{
+		"storageKey": "-s-ColorFileIcon",
+		"name": "colorFileIcon",
+		"desc": "Gebruik de accentkleur voor de icoontjes",
+		"isHeader": false,
+		"default": true,
+		"type": "bool",
+		"toastOnChange": "Instelling aangepast."
+	},
+	{
+		"storageKey": "-s-openFileOnDownload",
+		"name": "openFileOnDownload",
+		"desc": "Open bestand nadat het gedownload is",
+		"isHeader": false,
+		"default": "1",
+		"toastOnChange": "Instelling aangepast.",
+		"type": "picker",
+		"picker": "openFileOnDownload",
+		"options": [
+			{
+				"id": "open",
+				"name": "Altijd"
+			},
+			{
+				"id": "prompt",
+				"name": "Prompt"
+			},
+			{
+				"id": "close",
+				"name": "Nooit"
+			}
+		]
+	},
+	{
+		"isHeader": true,
+		"header": "Overig",
+		"type": "header"
+	},
+	{
+		"name": "deleteProposals",
+		"desc": "Verwijder voorgestelde zoekopdrachten.",
+		"isHeader": false,
+		"type": "confirm",
+		"toastOnChange": "None",
+		"confirm": [
+			"Weet je zeker dat je je zoek geschiedenis wilt verwijderen?",
+			"verwijderProposals",
+			"Verwijderen",
+			["Bewaar", "Verwijder"]
+		]
+	},
+	{
+		"name": "deleteAllFiles",
+		"desc": "Verwijder alle bestanden die door deze app gedownload zijn.",
+		"isHeader": false,
+		"type": "confirm",
+		"toastOnChange": "None",
+		"confirm": [
+			"Weet je zeker dat je ALLE bestanden die in het mapje 'Schoolbestanden' staan wilt verwijderen?",
+			"delete_all_files",
+			"Verwijder gedownloade bestanden",
+			["Bewaar", "Verwijder"]
+		]
+	},
+	{
+		"name": "uitloggen",
+		"desc": "Uitloggen",
+		"isHeader": false,
+		"type": "confirm",
+		"toastOnChange": "None",
+		"confirm": [
+			"Weet je zeker dat je wilt uitloggen? De app wordt na het uitloggen opnieuw opgestart.",
+			"logUitCheck2",
+			"Uitloggen",
+			["Uitloggen", "Cancel"]
+		]
+	}
+]
