@@ -1,4 +1,4 @@
-var version = 171 //1.6.1
+var version = 170 //1.6.1
 //var baseURL = "http://192.168.2.3:8000/"
 var baseURL = "https://api.fraignt.me/"
 isMaterial = false
