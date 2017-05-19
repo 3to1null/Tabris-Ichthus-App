@@ -591,6 +591,7 @@ updateProposals("");
 
 function updateProposals(query) {
 	 actionZoek.set("proposals", proposals.filter(function(proposal) {
+		 console.log(proposal)
 		  try{
 				return proposal.indexOf(query) !== -1;
 		  } catch (err){
@@ -2746,7 +2747,10 @@ function deleteAgendaItem(activityID){
 			showToast('Verwijderd', 1500, AgendaPagina)
 		},
 		error: function( response ){
+			AgendaPagina.find('#agendaFAB').animate({transform: {translationY: "-60"}}, {delay: 0, duration: 300, easing: "ease-out"});
 			showToast('Het is niet gelukt om het item te verwijderen.', 3500, AgendaPagina)
+			AgendaPagina.find('#agendaFAB').animate({transform: {translationY: "0"}}, {delay: 3500, duration: 400, easing: "ease-in", name: "dispose_toast"});
+			
 	}
 	});
 }
@@ -2977,6 +2981,7 @@ function render_agenda(items, container){
 	if(isMaterial){
 		new tabris.ImageView({
 			right: 16, bottom: 16, width: 56, height: 56,
+			id: 'agendaFAB',
 			elevation: 6,
 			cornerRadius: 28,
 			highlightOnTouch: true,
@@ -3000,16 +3005,18 @@ function render_agenda(items, container){
 	var scrollPosition = 0;
 	
 	var floatingSection = createSectionView();
-	
+
 	floatingSection.children()[0].set('textColor', colors.white_bg)
 	floatingSection.set('id', 'floatingSection')
 	floatingSection.set('background', colors.UI_bg)
 	floatingSection.set('elevation', 2)
 	floatingSection.set('height', SECTION_HEIGHT - 4)
 	floatingSection.children()[0].set('font', '18px')
-	floatingSection.children()[0].set({
-			text: items[0].text,
+	if(items.length !== 0){
+		floatingSection.children()[0].set({
+				text: items[0].text,
 		})
+	}
 	
 	
 	new tabris.CollectionView({
@@ -3202,14 +3209,27 @@ function get_agendaItems(refresh=false, useSession=false){
 		type: "POST",
 		crossDomain: true,
 		success: function( response ) {
-			if(refresh || (localStorage.getItem("agenda") !== null && localStorage.getItem('agenda') !== undefined)){
+			if(response.huiswerk.length === 0){
+				AgendaPagina.find('#agendaFAB').animate({transform: {translationY: "-60"}}, {delay: 0, duration: 300, easing: "ease-out"});
+				showToast('Je agenda is leeg, je kan een afspraak of opdracht toevoegen met het plusje.', 3500, AgendaPagina)	
+				AgendaPagina.find('#agendaFAB').animate({transform: {translationY: "0"}}, {delay: 3500, duration: 400, easing: "ease-in", name: "dispose_toast"});
+			}
+			if((refresh && response.huiswerk.length !== 0 && localStorage.getItem("agenda") !== '[]') || (localStorage.getItem("agenda") !== null && localStorage.getItem('agenda') !== undefined)){
 				AgendaPagina.find('#huiswerkCollection').set({
 					items: JSON.parse(JSON.stringify(response.huiswerk)),
 					refreshIndicator: false,
 				})
-				AgendaPagina.find('#floatingSection').children()[0].set({
-					text: JSON.parse(JSON.stringify(response.huiswerk))[0].text,
-				})
+				if(response.huiswerk.length !== 0){
+					AgendaPagina.find('#floatingSection').children()[0].set({
+						text: JSON.parse(JSON.stringify(response.huiswerk))[0].text,
+					})
+				}else{
+					if(response.huiswerk.length !== 0){
+						AgendaPagina.find('#floatingSection').children()[0].set({
+							text: '',
+						})
+					}
+				}
 			}else{
 				render_agenda(response.huiswerk, AgendaPagina);
 				spinner.dispose()
