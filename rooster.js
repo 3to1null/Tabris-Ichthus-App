@@ -1,6 +1,6 @@
-var version = 170 //1.6.1
-//var baseURL = "http://192.168.2.3:8000/"
-var baseURL = "https://api.fraignt.me/"
+var version = 172 //1.6.1
+var baseURL = "http://192.168.2.3:8000/"
+//var baseURL = "https://api.fraignt.me/"
 isMaterial = false
 if(parseInt(device.version) >= 5){
 	isMaterial = true
@@ -1154,7 +1154,7 @@ function renderSettings(settingsList, settingsPage){
 							boolSwitch.set('selection', data.default)
 						}
 						boolSwitch.on('change:selection', function(widget, selection){
-							var temp_confirmIfDiff = localStorage.getItem(data.storageKey)
+							let temp_confirmIfDiff = localStorage.getItem(data.storageKey)
 							localStorage.setItem(data.storageKey, selection);
 							if(data.toastOnChange !== "None" && temp_confirmIfDiff !== localStorage.getItem(data.storageKey)){
 								showToast(data.toastOnChange, 3500, settingsPage)
@@ -2729,7 +2729,6 @@ var AgendaPagina = new tabris.Page({
 })
 
 function deleteAgendaItem(activityID){
-	console.log(activityID)
 	$.ajax({
 		//url: "https://api.fraignt.me/Rooster/huiswerk/create/",
 		url: baseURL + "Rooster/huiswerk/delete/",
@@ -2743,7 +2742,12 @@ function deleteAgendaItem(activityID){
 		crossDomain: true,
 		success: function( response ) {
 			get_agendaItems(true, true)
-		}
+			console.log(response)
+			showToast('Verwijderd', 1500, AgendaPagina)
+		},
+		error: function( response ){
+			showToast('Het is niet gelukt om het item te verwijderen.', 3500, AgendaPagina)
+	}
 	});
 }
 
@@ -2998,6 +3002,7 @@ function render_agenda(items, container){
 	var floatingSection = createSectionView();
 	
 	floatingSection.children()[0].set('textColor', colors.white_bg)
+	floatingSection.set('id', 'floatingSection')
 	floatingSection.set('background', colors.UI_bg)
 	floatingSection.set('elevation', 2)
 	floatingSection.set('height', SECTION_HEIGHT - 4)
@@ -3082,14 +3087,13 @@ function render_agenda(items, container){
 					localStorage.setItem('pressTimes2', 1)
 					function onConfirm(buttonIndex) {
 						if(buttonIndex == 1){
-							console.log(widget.get('item'))
 							deleteAgendaItem(widget.get('item')['activityId'])
 						}
 					}
 					navigator.notification.confirm(
-						'Weet je zeker dat je '+ widget.get('item').name + ' wilt verwijderen?', // message
+						'Weet je zeker dat je '+ widget.get('item').title + ' wilt verwijderen?', // message
 						onConfirm,            // callback to invoke with index of button pressed
-						'Verwijder ' + widget.get('item').name,           // title
+						'Verwijder ' + widget.get('item').title,           // title
 						['Verwijder','Bewaar']     // buttonLabels
 					);
 				}else{
@@ -3202,6 +3206,9 @@ function get_agendaItems(refresh=false, useSession=false){
 				AgendaPagina.find('#huiswerkCollection').set({
 					items: JSON.parse(JSON.stringify(response.huiswerk)),
 					refreshIndicator: false,
+				})
+				AgendaPagina.find('#floatingSection').children()[0].set({
+					text: JSON.parse(JSON.stringify(response.huiswerk))[0].text,
 				})
 			}else{
 				render_agenda(response.huiswerk, AgendaPagina);
