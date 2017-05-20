@@ -1,6 +1,6 @@
-var version = 172 //1.6.1
-var baseURL = "http://192.168.2.3:8000/"
-//var baseURL = "https://api.fraignt.me/"
+var version = 173 //1.7.3
+//var baseURL = "http://192.168.2.3:8000/"
+var baseURL = "https://api.fraignt.me/"
 isMaterial = false
 if(parseInt(device.version) >= 5){
 	isMaterial = true
@@ -323,6 +323,8 @@ function get_rooster(user, code){
 				localStorage.setItem('rooster', JSON.stringify(response));
 				var nu = new Date()
 				localStorage.setItem('__tijd', nu.getTime())
+			}else if(String(user) === localStorage.getItem('__ID')){
+				showToast('Om je eigen rooster te laden kan je ook op je naam klikken in het menu aan de zijkant.', 3500, page)
 			}
 			localStorage.setItem('__rooster', JSON.stringify(response));
 			r = JSON.parse(JSON.stringify(response))
@@ -347,14 +349,17 @@ function get_rooster(user, code){
 				getRoosterIsFinished = true
 				var nu = new Date()
 				if(parseInt(nu.getTime()) - parseInt(localStorage.getItem('__tijd')) > 86400000){ // 86400000 is 24 uur
-					showToast('Dit rooster is ouder dan een dag, er kunnen lessen veranderd zijn. Open het rooster met een internet verbinding om het bij te werken.', 6000, page)
+					showToast('Dit rooster is ouder dan een dag, er kunnen lessen veranderd zijn. Open het rooster met een internet verbinding om het bij te werken.', 3500, page)
 				} 
+			}else if(parseInt(response.status) == 500){
+				showToast('Er is iets fout gegaan bij het laden van dit rooster. Je eigen rooster wordt nu weer geladen.', 3500, page)
+				get_rooster('~me', localStorage.getItem('code'));
 			}else{
-				showToast('Omdat er geen verbinding en geen offline rooster is wordt er geprobeerd opnieuw verbinding te maken.', 5000, page)
+				showToast('Omdat er geen verbinding en geen offline rooster is wordt er geprobeerd opnieuw verbinding te maken.', 3500, page)
 				get_rooster(user, localStorage.getItem('code'));
 			}
 		},
-		timeout: 2000
+		timeout: 3000
 	})
 }
 
@@ -2526,14 +2531,14 @@ function download_and_open_file(path, name, local, pathTo, size){
 							'Wil je ' + name + ' nu openen?', // message
 							open_file,            // callback to invoke with index of button pressed
 							name,           // title
-							['Annuleren','Open']     // buttonLabels
+							['Open','Annuleren']     // buttonLabels
 						);
 					}else if(localStorage.getItem('-s-openFileOnDownload') === "0"){
 						open_file(2)
 					}else if(localStorage.getItem('-s-openFileOnDownload') === "2"){
 					}
 					function open_file(index){
-						if(index === "2" || index === 2){
+						if(index === "1" || index === 1){
 							window.cordova.plugins.FileOpener.openFile(
 								decodeURIComponent(entry.toURL()),
 								function(){
@@ -2744,7 +2749,9 @@ function deleteAgendaItem(activityID){
 		success: function( response ) {
 			get_agendaItems(true, true)
 			console.log(response)
-			showToast('Verwijderd', 1500, AgendaPagina)
+			AgendaPagina.find('#agendaFAB').animate({transform: {translationY: "-60"}}, {delay: 0, duration: 300, easing: "ease-out"});
+			showToast('Afspraak verwijderd', 2500, AgendaPagina)
+			AgendaPagina.find('#agendaFAB').animate({transform: {translationY: "0"}}, {delay: 2500, duration: 400, easing: "ease-in", name: "dispose_toast"});
 		},
 		error: function( response ){
 			AgendaPagina.find('#agendaFAB').animate({transform: {translationY: "-60"}}, {delay: 0, duration: 300, easing: "ease-out"});
@@ -2774,6 +2781,9 @@ function createCalendarEventPage(){
 			crossDomain: true,
 			success: function( response ) {
 				get_agendaItems(true, true)
+				AgendaPagina.find('#agendaFAB').animate({transform: {translationY: "-60"}}, {delay: 0, duration: 300, easing: "ease-out"});
+				showToast('"' + title + '" toegevoegd aan agenda.', 3500, AgendaPagina)
+				AgendaPagina.find('#agendaFAB').animate({transform: {translationY: "0"}}, {delay: 3500, duration: 400, easing: "ease-in", name: "dispose_toast"});
 			}
 		});
 	}
@@ -3016,6 +3026,10 @@ function render_agenda(items, container){
 		floatingSection.children()[0].set({
 				text: items[0].text,
 		})
+	}else{
+		floatingSection.children()[0].set({
+			text: 'Je agenda is leeg'
+		})
 	}
 	
 	
@@ -3213,6 +3227,7 @@ function get_agendaItems(refresh=false, useSession=false){
 				AgendaPagina.find('#agendaFAB').animate({transform: {translationY: "-60"}}, {delay: 0, duration: 300, easing: "ease-out"});
 				showToast('Je agenda is leeg, je kan een afspraak of opdracht toevoegen met het plusje.', 3500, AgendaPagina)	
 				AgendaPagina.find('#agendaFAB').animate({transform: {translationY: "0"}}, {delay: 3500, duration: 400, easing: "ease-in", name: "dispose_toast"});
+				
 			}
 			if((refresh && response.huiswerk.length !== 0 && localStorage.getItem("agenda") !== '[]') || (localStorage.getItem("agenda") !== null && localStorage.getItem('agenda') !== undefined)){
 				AgendaPagina.find('#huiswerkCollection').set({
@@ -3224,11 +3239,9 @@ function get_agendaItems(refresh=false, useSession=false){
 						text: JSON.parse(JSON.stringify(response.huiswerk))[0].text,
 					})
 				}else{
-					if(response.huiswerk.length !== 0){
 						AgendaPagina.find('#floatingSection').children()[0].set({
-							text: '',
+							text: 'Je agenda is leeg',
 						})
-					}
 				}
 			}else{
 				render_agenda(response.huiswerk, AgendaPagina);
@@ -3649,14 +3662,6 @@ function onSelectHuiswerk(widget, item){
 		}
 	})
 }
-
-
-
-
-
-
-
-
 
 
 
