@@ -1,6 +1,6 @@
 var version = 173 //1.7.3
-//var baseURL = "http://192.168.2.3:8000/"
-var baseURL = "https://api.fraignt.me/"
+var baseURL = "http://192.168.2.4:8000/"
+//var baseURL = "https://api.fraignt.me/"
 isMaterial = false
 if(parseInt(device.version) >= 5){
 	isMaterial = true
